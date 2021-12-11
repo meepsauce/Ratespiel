@@ -3,34 +3,40 @@ var Datastore = require('nedb')
 
 class dbClass {
     constructor() {
-        this.db = new Datastore({ filename: "./sets.db", autoload: true });
+        this.db = new Datastore({ filename: "./lib/sets.db", autoload: true });
         this.tempDb = new Datastore({autoload: true });
+        this.recent = [];
+        this.startTime = Date.now();
     }
 
-    static questionObject(q, a, static=false) {
+    static questionObject(q, a, stat=false) {
         return {
             "question": q,
             "answer": a,
-            "static": static
+            "static": stat
         }
     }
 
-    static setObject(questions, creator="Anonymous") {
+    static setObject(name, questions, creator="Anonymous", shuffle=true) {
         return {
+            "name": name,
             "creator": creator,
-            "question": questions
+            "shuffle": shuffle,
+            "questions": questions
         }
     }
 
     async insertSet(set, temporary=true) {
         return new Promise((resolve, reject) => {
             if(temporary) {
+                this.recent.push(set);
                 this.tempDb.insert(set, (err, doc)=> {
                     if(err) reject(err);
                     resolve(doc._id);
                 });
             }
             else {
+                this.recent.push(set);
                 this.db.insert(set, (err, doc)=> {
                     if(err) reject(err);
                     resolve(doc._id);

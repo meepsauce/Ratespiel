@@ -48,3 +48,7 @@
 .big {
   font-size: xx-large;
 }
+
+.inline {
+  display: inline-block;
+}

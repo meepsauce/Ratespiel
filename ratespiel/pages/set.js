@@ -13,9 +13,7 @@ class Frage {
 
 var Fragen = [new Frage("Was ist Blau", "b"), new Frage("ee", "eee")];
 var korrektWurden = ["Korrekt", "Super", "Genau", "Richtig"];
-var modalZeit = 1.5; //sekunden
-
-
+var modalZeit = 1.5; 
 
 class KorrektModal extends React.Component {
  	constructor(props) {

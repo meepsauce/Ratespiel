@@ -32,3 +32,9 @@ input[type="submit"] {
   font-weight: bold;
   font-size: 1em;
 }
+
+input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0 0;
+}
