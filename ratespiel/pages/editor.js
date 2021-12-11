@@ -5,6 +5,23 @@ import React from 'react';
 import { db } from '../lib/db';
 
 
+class stateStorage {
+    constructor() {
+        this.data = [];
+    }
+
+    addEntry() {
+        this.data.push(null);
+        return this.data.length-1;
+    }
+
+    setEntry(id, data) {
+        this.data[id] = data;
+    }
+}
+
+var storage = new stateStorage();
+
 class Checkbox extends React.Component {
     constructor(props) {
         super(props);
@@ -15,19 +32,22 @@ class Checkbox extends React.Component {
     }
 }
 
-
 class Question extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            index: 0,
+            index: storage.addEntry(),
             question: "",
             answer: "",
             strict: false,
         }
     }
     componentDidUpdate() {
-        //saving
+        storage.setEntry(this.state.index, {
+            question: this.state.question,
+            answer: this.state.answer,
+            strict: this.state.strict
+        });
     }
     render() {
         return <div className={styles.card} >
@@ -46,18 +66,27 @@ class Editor extends React.Component {
         this.state = {
             questions: [<Question key={0}></Question>],
             secondPart: false,
-            
+            id: null,
+            url: null,
+            author: "Anonymous",
+            name: "Very Cool set",
+            shuffle: false,
+
         };
         this.generate = this.generate.bind(this);
+
+        window.onbeforeunload = ()=>{
+            return 'Are you sure you want to leave?';
+        };
     }
 
-    generate() {
-
+    async generate() {
+       var obj = db.setObject(this.state.name, storage.data, storage.author, this.state.shuffle);
+       var id = await db.insertSet(obj, true);
+       this.setState({id: id, url: window.location.href.replace("editor", `set?id=${id}`)});
     }
     
     render() {
-        
-
         return <div className={styles.card}>
         <h1>Editor</h1>
             <hr></hr>
@@ -66,13 +95,32 @@ class Editor extends React.Component {
                     <h3>Questions:</h3>
                     {this.state.questions}
                     <button onClick={()=>{this.setState({questions: [...this.state.questions, <Question key={this.state.questions.length}></Question>]})}}>Add Question</button>
+                    <br></br>
+                    <br></br>
                     <button onClick={()=>{this.setState({secondPart: true})}}>Next</button>
                 </div>   
             ) : (
                 <div>
                     <h3>Settings: </h3>
-                    <button onClick={()=>{this.setState({secondPart: false})}}>Back to Questions</button>
-                    <button onClick={()=>{}}>Publish Set</button>
+                    {this.state.id ? (
+                        <div>
+                            <h1>Your Set Has Been Published!</h1>
+                            <h2>Your code is <span className={styles.code}>{this.state.id}</span></h2>
+                            <h2>Link: <Link href={this.state.url}>{this.state.url}</Link></h2>
+                        </div>
+                    ) : (
+                    <div>
+                        <label><b>Set Name:</b></label><input type="text"></input>
+                        <br></br>
+                        <label><b>Author Name:</b></label><input type="text"></input>
+                        <br></br>
+                        <label>Shuffle Set: </label><Checkbox onChange={()=>{}}></Checkbox>
+                        <br></br>
+                        <br></br>
+                        <button onClick={()=>{this.setState({secondPart: false})}}>Back to Questions</button>
+                        <button onClick={()=>{this.generate()}}><b>Publish Set</b></button>
+                    </div>
+                    )}
                 </div>
             )}
             

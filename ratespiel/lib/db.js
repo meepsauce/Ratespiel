@@ -9,7 +9,7 @@ class dbClass {
         this.startTime = Date.now();
     }
 
-    static questionObject(q, a, stat=false) {
+    questionObject(q, a, stat=false) {
         return {
             "question": q,
             "answer": a,
@@ -17,7 +17,19 @@ class dbClass {
         }
     }
 
-    static setObject(name, questions, creator="Anonymous", shuffle=true) {
+
+
+    cleanQuestions(questions) {
+        for (var i = questions.length - 1; i >= 0; i--) {
+            var q = questions[i];
+            if(Object.keys(q) == 0) {
+                questions.splice(index, 1)
+            }
+            
+        }
+    }
+
+    setObject(name, questions, creator="Anonymous", shuffle=true) {
         return {
             "name": name,
             "creator": creator,
@@ -31,14 +43,14 @@ class dbClass {
             if(temporary) {
                 this.recent.push(set);
                 this.tempDb.insert(set, (err, doc)=> {
-                    if(err) reject(err);
+                    if(err) resolve(null);
                     resolve(doc._id);
                 });
             }
             else {
                 this.recent.push(set);
                 this.db.insert(set, (err, doc)=> {
-                    if(err) reject(err);
+                    if(err) resolve(null);
                     resolve(doc._id);
                 });
             }
@@ -51,7 +63,7 @@ class dbClass {
                 if(err) reject(err);
                 if(!doc) {
                     this.tempDb.findOne({ _id: id }, function (err, doc) {
-                        if(err) reject(err);
+                        if(err) resolve(null);
                         if(doc) {
                             resolve(doc)
                         }

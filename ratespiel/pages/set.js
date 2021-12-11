@@ -1,5 +1,4 @@
-import Head from 'next/head'
-import Image from 'next/image'
+import { db } from '../lib/db';
 import styles from '../styles/Home.module.css'
 import React from 'react';
 
@@ -11,7 +10,16 @@ class Frage {
   }
 }
 
-var Fragen = [new Frage("Was ist Blau", "b"), new Frage("ee", "eee")];
+async function questionLoader() {
+  var id = new URLSearchParams(window.location.href).get("id");
+  var obj = await db.find(id);
+  if(obj == null) {
+    alert("Provided Code does not exist :(")
+  }
+  return obj;
+}
+
+var Objekt = questionLoader();
 var korrektWurden = ["Korrekt", "Super", "Genau", "Richtig"];
 var modalZeit = 1.5; 
 
@@ -62,8 +70,8 @@ class FrageHalter extends React.Component {
   }
   
   pruefen(event) {
-  	const frage = Fragen[this.state.index];
-  	if(this.state.antwortenwert === frage.antworten) {
+  	const frage = Objeckt.questions[this.state.index];
+  	if(this.state.antwortenwert === frage.answer) {
       this.setState({anzeigenModal: true, index: this.state.index+1, anzeigenUnrecht: false, ergebnis: this.state.ergebnis+1});
       setTimeout(this.verbergenModal, modalZeit * 1000);
       
@@ -72,7 +80,7 @@ class FrageHalter extends React.Component {
     	this.setState({anzeigenUnrecht: true, index: this.state.index+1});
         setTimeout(this.verbergenUnrecht, modalZeit * 1000);
     }
-    //this.setState({anzeigenModal: true, index: this.state.index+1, anzeigenUnrecht: false});
+    
     event.preventDefault();
   }
   
@@ -85,15 +93,15 @@ class FrageHalter extends React.Component {
   
   render() {
   	
-  	const frage = Fragen[this.state.index];
+  	const frage = Objekt.questions[this.state.index];
     
   	return (
     <div>
       { this.state.anzeigenModal ? <KorrektModal /> : null }
       <form onSubmit={this.pruefen}>
-        <h1>Frage {this.state.index + 1}/{Fragen.length}</h1>
-        <h3>Ergebnis: {this.state.ergebnis}/{Fragen.length}</h3>
-        <h2>„ {frage.frage} ”?</h2>
+        <h1>Frage {this.state.index + 1}/{Objekt.questions.length}</h1>
+        <h3>Ergebnis: {this.state.ergebnis}/{Objekt.questions.length}</h3>
+        <h2>„ {frage.question} ”</h2>
         <input type="text" value={this.state.antwortenwert} onChange={(e)=>this.antwortenChange(e.target.value)}/>
         <br/>
         <div>

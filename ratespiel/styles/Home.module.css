@@ -52,3 +52,13 @@
 .inline {
   display: inline-block;
 }
+
+.code {
+  color: white;
+  background-color: black;
+  font-weight: bolder;
+  font-family: monospace;
+  box-sizing: border-box;
+  padding: 8px 8px;
+  border-radius: 5px;
+}
