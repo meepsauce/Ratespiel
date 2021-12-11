@@ -3,18 +3,12 @@ import styles from '../styles/Home.module.css'
 import React from 'react';
 
 
-class Frage {
-	constructor(frage, antworten) {
-  	this.frage = frage;
-    this.antworten = antworten;
-  }
-}
-
 async function questionLoader() {
   var id = new URLSearchParams(window.location.href).get("id");
   var obj = await db.find(id);
   if(obj == null) {
-    alert("Provided Code does not exist :(")
+    alert("Provided Code does not exist :(");
+    return null;
   }
   return obj;
 }
