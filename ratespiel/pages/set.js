@@ -1,19 +1,9 @@
-import { db } from '../lib/db';
+
 import styles from '../styles/Home.module.css'
 import React from 'react';
+import { find } from '../lib/api';
 
-
-async function questionLoader() {
-  var id = new URLSearchParams(window.location.href).get("id");
-  var obj = await db.find(id);
-  if(obj == null) {
-    alert("Provided Code does not exist :(");
-    return null;
-  }
-  return obj;
-}
-
-var Objekt = questionLoader();
+var Objekt = null;
 var korrektWurden = ["Korrekt", "Super", "Genau", "Richtig"];
 var modalZeit = 1.5; 
 
@@ -118,12 +108,47 @@ class FrageHalter extends React.Component {
 class App extends React.Component {
  	constructor(props) {
   	super(props);
+    this.state = {
+      start: false,
+      loaded: false,
+    }
+
+    this.load = this.load.bind(this);
+    this.load();
+  }
+
+  async load() {
+   if (typeof window !== 'undefined') { //forces it client side
+      var url = window.location.href;
+
+      var id = url.split("=")[1];
+      var obj = await find(id);
+      console.log(obj);
+      if(obj == null) {
+        alert("Provided Code does not exist :(");
+        return null;
+      }
+      Objekt = obj;
+      this.setState({loaded: true});
+   } 
   }
   render() {
+
   	return (
     <div className={styles.centered}>
         <div className={styles.card}>
+          {this.state.start ? (
             <FrageHalter/>
+          ): (
+            <div>
+              {!this.state.loaded ? <h1>Loading....</h1> : (
+                <div>
+                  <h1>Ready to go</h1>
+                  <button onClick={()=>{this.setState({start: true})}}></button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
     </div>
     );

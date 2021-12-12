@@ -1,15 +1,15 @@
 var Datastore = require('nedb')
 
 
-class dbClass {
+export class dbClass {
     constructor() {
         this.db = new Datastore({ filename: "./lib/sets.db", autoload: true });
-        this.tempDb = new Datastore({autoload: true });
         this.recent = [];
         this.startTime = Date.now();
+        console.log("ready!");
     }
 
-    questionObject(q, a, stat=false) {
+    static questionObject(q, a, stat=false) {
         return {
             "question": q,
             "answer": a,
@@ -18,8 +18,7 @@ class dbClass {
     }
 
 
-
-    cleanQuestions(questions) {
+    static cleanQuestions(questions) {
         for (var i = questions.length - 1; i >= 0; i--) {
             var q = questions[i];
             if(Object.keys(q) == 0) {
@@ -29,7 +28,7 @@ class dbClass {
         }
     }
 
-    setObject(name, questions, creator="Anonymous", shuffle=true) {
+    static setObject(name, questions, creator="Anonymous", shuffle=true) {
         return {
             "name": name,
             "creator": creator,
@@ -38,47 +37,45 @@ class dbClass {
         }
     }
 
-    async insertSet(set, temporary=true) {
-        return new Promise((resolve, reject) => {
-            if(temporary) {
-                this.recent.push(set);
-                this.tempDb.insert(set, (err, doc)=> {
-                    if(err) resolve(null);
-                    resolve(doc._id);
-                });
-            }
-            else {
-                this.recent.push(set);
-                this.db.insert(set, (err, doc)=> {
-                    if(err) resolve(null);
-                    resolve(doc._id);
-                });
-            }
+    static code() {
+        return Math.random().toString(18).slice(2).slice(8);
+    }
+
+    generateId() {
+        var code = this.code();
+        if(!this.find(code)) {
+            return code;
+        }
+        else {
+            return this.generateId();
+        }
+    }
+
+    async insertSet(set) {
+        return new Promise((resolve, reject)=> {
+            console.log("pushed to lingering");
+            set._id = this.generateId();
+            this.recent.push(set);
+            this.db.insert(set, (err, doc)=> {
+                if(err) resolve(null);
+                resolve(doc);
+            });
         });
     }
 
-    async find(id) {
-        return new Promise((resolve, reject) => {
-            this.db.findOne({ _id: id }, function (err, doc) {
-                if(err) reject(err);
-                if(!doc) {
-                    this.tempDb.findOne({ _id: id }, function (err, doc) {
-                        if(err) resolve(null);
-                        if(doc) {
-                            resolve(doc)
-                        }
-                        else {
-                            resolve(null)
-                        }
-                    });
-                }
-                else {
-                    resolve(doc)
-                }
-            });
-        })   
+   
+    find(id) {
+        this.db.findOne({ _id: id }, function (err, doc) {
+                if(err) return(null);
+                
+                return(doc)
+                
+        });  
     }
 }
-
 var db = new dbClass();
-module.exports = {db}
+db.insertSet({"testing": "sucks"});
+export function connectDb() {
+    return db;
+}
+

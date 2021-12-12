@@ -2,7 +2,9 @@
 import Link from "next/link"
 import styles from '../styles/Home.module.css'
 import React from 'react';
-import { db } from '../lib/db';
+import { add } from "../lib/api";
+import { dbClass } from "../lib/db";
+
 
 
 class stateStorage {
@@ -81,8 +83,9 @@ class Editor extends React.Component {
     }
 
     async generate() {
-       var obj = db.setObject(this.state.name, storage.data, storage.author, this.state.shuffle);
-       var id = await db.insertSet(obj, true);
+       var obj = dbClass.setObject(this.state.name, storage.data, storage.author, this.state.shuffle);
+       var id = await add(obj);
+       console.log("data: " + id);
        this.setState({id: id, url: window.location.href.replace("editor", `set?id=${id}`)});
     }
     

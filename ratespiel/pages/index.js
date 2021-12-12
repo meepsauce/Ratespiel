@@ -2,15 +2,17 @@
 import Link from "next/link"
 import styles from '../styles/Home.module.css'
 import React from 'react';
-import { db } from '../lib/db';
-
+import { recentSets, alive } from "../lib/api";
 
 export async function getServerSideProps(context) {
+  
+  var data = await alive();
+  var recent = await recentSets();
   return {
     props: {
-      dbOn: db.startTime,
-      apiOn: true,
-      recent: db.recent
+      dbOn: data.time ?? null,
+      apiOn: data.status ?? null,
+      recent : recent
     }
   }
 }
