@@ -26,7 +26,9 @@ function formatTime(millis) {
 function RecentList(props) {
   
   var recent = props.recent;
-  var html;
+  while(recent.length > 15) {
+    recent.pop();
+  }
   console.log(recent);
   if(Object.keys(recent).length >= 1) {
     

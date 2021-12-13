@@ -31,6 +31,7 @@ class FrageHalter extends React.Component {
   	super(props);
     this.state = {
     	index: 0,
+      maxIndex: Objeckt.questions.length-1,
         antwortenwert: "",
         anzeigenModal: false,
         anzeigenUnrecht: false,
