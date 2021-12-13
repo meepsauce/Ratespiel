@@ -84,6 +84,7 @@ export class dbClass {
     }
 }
 var db = new dbClass();
+
 export function connectDb() {
     return db;
 }

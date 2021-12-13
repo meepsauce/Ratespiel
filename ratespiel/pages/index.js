@@ -33,7 +33,7 @@ function RecentList(props) {
     recent = recent.map((item,i) => {
       
       return (
-        <Link href={`http://localhost:3000/set?id=${item._id}`}>
+        <Link href={`https://3000-red-magpie-hfiuwsrk.ws-us23.gitpod.io/set?id=${item._id}`}>
           <div key={i} className={styles.card}>
           <h3>{item.name} -- By: {item.creator} - {item.questions.length} questions</h3>
           </div>
@@ -54,12 +54,25 @@ function RecentList(props) {
 export default function Home(props) {
 
   const [code, setCode] = React.useState(null);
+  const [codeError, setCodeError] = React.useState(null);
 
   const goToSet = ()=> {
-    window.location = window.location.href + `set?id=${code}`
+    if(code) {
+      if(code.length >= 2) {
+        window.location = window.location.href + `set?id=${code}`
+      }
+      else {
+        setCodeError("Invalid Code");
+      }
+    }
+    else {
+      setCodeError("Invalid Code");
+    }
+   
   }
   
   return <div className={styles.centered}>
+    <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/>
       <div className={styles.card}>
         <h1 className={styles.big}>Ratespiel</h1>
         <h5>Quizlet but worse</h5>
@@ -72,11 +85,18 @@ export default function Home(props) {
         <h2>[Content is supposed to be here]</h2>
         
         <label><b>Enter a set's code: </b></label><input type="text" value={code} onChange={(e)=>{setCode(e.target.value)}}></input>
+        <p className={styles.red}>{codeError}</p>
         <button onClick={goToSet}>Go</button>
 
         <h2>Oder</h2>
         <Link href="/editor">
           <button>Create a new set (no account required)</button>
+        </Link>
+        <Link href="https://github.com/meepsauce/Ratespiel">
+          <button>View GitHub Repository <span className="fa fa-github" style={{fontSize: "16px"}}></span></button>
+        </Link>
+        <Link href="/docs">
+          <button>View API Docs</button>
         </Link>
         
       </div>
