@@ -2,6 +2,7 @@
 import styles from '../styles/Home.module.css'
 import React from 'react';
 import { find } from '../lib/api';
+import JSConfetti from 'js-confetti'
 
 var Objekt = null;
 var korrektWurden = ["Korrekt", "Super", "Genau", "Richtig"];
@@ -38,6 +39,8 @@ class FrageHalter extends React.Component {
         anzeigenUnrecht: false,
         ergebnis: 0
     };
+
+    this.confetti = new JSConfetti()
     
    
     this.antwortenChange = this.antwortenChange.bind(this);
@@ -75,7 +78,9 @@ class FrageHalter extends React.Component {
     }
 
     if(this.state.index >= this.state.maxIndex) {
-      this.setState({done: true}); //cant do thissssss
+      this.confetti.addConfetti()
+      this.setState({done: true});
+      
     }
     event.preventDefault();
     event.stopPropagation();
@@ -119,6 +124,7 @@ class FrageHalter extends React.Component {
       )
     } else {
       return <div>
+        
         <h1>All Done</h1>
         <hr></hr>
         <h3>You got {this.state.ergebnis} out of {Objekt.questions.length}</h3>
