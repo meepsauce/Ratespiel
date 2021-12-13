@@ -68,7 +68,7 @@ class Editor extends React.Component {
         this.state = {
             questions: [<Question key={0}></Question>],
             secondPart: false,
-            id: null,
+            setId: null,
             url: null,
             author: "Anonymous",
             name: "Very Cool set",
@@ -85,9 +85,9 @@ class Editor extends React.Component {
     async generate() {
        var obj = dbClass.setObject(this.state.name, storage.data, storage.author, this.state.shuffle);
        var req = await add(obj);
-       console.log("whyyyy");
-       var setId = req.setId;
-       console.log("data: " + setId);
+       
+       var setId = req.object._id;
+       
        this.setState({setId: setId, url: window.location.href.replace("editor", `set?id=${setId}`)});
     }
     
@@ -107,10 +107,11 @@ class Editor extends React.Component {
             ) : (
                 <div>
                     <h3>Settings: </h3>
-                    {this.state.id ? (
+                    {this.state.setId ? (
                         <div>
                             <h1>Your Set Has Been Published!</h1>
-                            <h2>Your code is <span className={styles.code}>{this.state.id}</span></h2>
+                            <hr></hr>
+                            <h2>Your code is <span className={styles.code}>{this.state.setId}</span></h2>
                             <h2>Link: <Link href={this.state.url}>{this.state.url}</Link></h2>
                         </div>
                     ) : (
@@ -123,7 +124,7 @@ class Editor extends React.Component {
                         <br></br>
                         <br></br>
                         <button onClick={()=>{this.setState({secondPart: false})}}>Back to Questions</button>
-                        <button onClick={this.generate}><b>Publish Set</b></button>
+                        <button onClick={()=>{this.generate()}}><b>Publish Set</b></button>
                     </div>
                     )}
                 </div>

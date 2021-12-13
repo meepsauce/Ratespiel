@@ -1,6 +1,5 @@
 import { connectDb } from "../../lib/db"
 
-export default function handler(req, res) {
-
-    res.status(200).json(connectDb().recent);
+export default async function handler(req, res) {
+    res.status(200).json(await connectDb().recentSets());
 }

@@ -143,8 +143,10 @@ class App extends React.Component {
             <div>
               {!this.state.loaded ? <h1>Loading....</h1> : (
                 <div>
-                  <h1>Ready to go</h1>
-                  <button onClick={()=>{this.setState({start: true})}}></button>
+                  <h1>Bereit?</h1>
+                  <hr></hr>
+                  <h2>{Objekt.name} by {Objekt.creator}</h2>
+                  <button onClick={()=>{this.setState({start: true})}}>Beginnen!</button>
                 </div>
               )}
             </div>

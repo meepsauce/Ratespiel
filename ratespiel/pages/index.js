@@ -5,14 +5,13 @@ import React from 'react';
 import { recentSets, alive } from "../lib/api";
 
 export async function getServerSideProps(context) {
-  
   var data = await alive();
   var recent = await recentSets();
   return {
     props: {
       dbOn: data.time ?? null,
       apiOn: data.status ?? null,
-      recent : recent
+      recent : recent 
     }
   }
 }
@@ -25,17 +24,22 @@ function formatTime(millis) {
 }
 
 function RecentList(props) {
+  
   var recent = props.recent;
-  if(recent) {
-    while(recent.length < 15) {
-      recent.pop();
-    }
-    this.state.data.map((item,i) => {
-      <div>
-        <span>{item.name} - By: {item.creator} - {item.questions.length} questions</span>
-        <hr></hr>
-      </div>
-    })
+  var html;
+  console.log(recent);
+  if(Object.keys(recent).length >= 1) {
+    
+    recent = recent.map((item,i) => {
+      
+      return (
+        <Link href={`http://localhost:3000/set?id=${item._id}`}>
+          <div key={i} className={styles.card}>
+          <h3>{item.name} -- By: {item.creator} - {item.questions.length} questions</h3>
+          </div>
+        </Link>
+      );
+    });
   }
   else {
     recent = "No recent sets available :(";
@@ -46,7 +50,14 @@ function RecentList(props) {
   </div>
 }
 
+
 export default function Home(props) {
+
+  const [code, setCode] = React.useState(null);
+
+  const goToSet = ()=> {
+    window.location = window.location.href + `set?id=${code}`
+  }
   
   return <div className={styles.centered}>
       <div className={styles.card}>
@@ -57,15 +68,22 @@ export default function Home(props) {
         <h5>API: { props.apiOn ? <span>&#9989;</span> : <span>&#10060;</span> } </h5>
         <h4>{ props.dbOn ? <h5>Uptime: {formatTime(props.dbOn)}</h5> : null }</h4>
         <hr></hr>
-        <h1>Hey so</h1>
-        <h2>Content is supposed to be here</h2>
-        <h3>But for now you can do these things:</h3>
+        <h4 className={styles.red}>*As this software is in active development, your data will not be persistently saved</h4>
+        <h2>[Content is supposed to be here]</h2>
+        
+        <label><b>Enter a set's code: </b></label><input type="text" value={code} onChange={(e)=>{setCode(e.target.value)}}></input>
+        <button onClick={goToSet}>Go</button>
+
+        <h2>Oder</h2>
         <Link href="/editor">
           <button>Create a new set (no account required)</button>
         </Link>
+        
       </div>
       <br></br>
-      <RecentList></RecentList>
+      <RecentList recent={props.recent}></RecentList>
+      <br></br>
+      <br></br>
 
      
     </div>

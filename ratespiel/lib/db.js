@@ -4,6 +4,7 @@ var Datastore = require('nedb')
 export class dbClass {
     constructor() {
         this.db = new Datastore({ filename: "./lib/sets.db", autoload: true });
+        this.recentDb = new Datastore({filename: "./lib/recent.db", autoload: true})
         this.recent = [];
         this.startTime = Date.now();
         console.log("ready!");
@@ -41,37 +42,45 @@ export class dbClass {
         return Math.random().toString(18).slice(2).slice(8);
     }
 
-    generateId() {
+    async generateId() {
         var code = dbClass.code();
-        if(!this.find(code)) {
+        if(!await this.find(code)) {
             return code;
         }
         else {
-            return this.generateId();
+            return await this.generateId();
         }
     }
 
     async insertSet(set) {
-        return new Promise((resolve, reject)=> {
-            console.log("pushed to lingering");
-            
-            set._id = this.generateId();
-            this.recent.push(set);
+        return new Promise(async(resolve, reject)=> {     
+            set._id = await this.generateId();
             this.db.insert(set, (err, doc)=> {
                 if(err) resolve(null);
+                this.recentDb.insert(doc);
+                this.recent.push(doc);
                 resolve(doc);
             });
         });
     }
 
+    async recentSets() {
+        return new Promise((resolve, reject) => {
+            this.recentDb.find({}, function(err, docs) {
+                if(err) resolve(null);
+                resolve(docs);
+            });
+        });
+    }
    
-    find(id) {
-        this.db.findOne({ _id: id }, function (err, doc) {
-                if(err) return(null);
-                
-                return(doc)
-                
-        });  
+    async find(id) {
+        return new Promise((resolve, reject)=> {
+            this.db.findOne({ _id: id }, function (err, doc) {
+                if(err) resolve(null);
+                resolve(doc)
+            });
+        })
+          
     }
 }
 var db = new dbClass();
