@@ -31,7 +31,7 @@ class FrageHalter extends React.Component {
   	super(props);
     this.state = {
     	index: 0,
-      maxIndex: Objeckt.questions.length-1,
+      maxIndex: Objekt.questions.length-1,
       done: false,
         antwortenwert: "",
         anzeigenModal: false,
@@ -56,18 +56,29 @@ class FrageHalter extends React.Component {
   }
   
   pruefen(event) {
-  	const frage = Objeckt.questions[this.state.index];
+  	const frage = Objekt.questions[this.state.index];
+    if(frage.strict == false) {
+      frage.answer = frage.answer.toLowerCase();
+      this.state.antwortenwert =this.state.antwortenwert.toLowerCase();
+    }
   	if(this.state.antwortenwert === frage.answer) {
-      this.setState({anzeigenModal: true, index: this.state.index+1, anzeigenUnrecht: false, ergebnis: this.state.ergebnis+1});
+      this.setState({anzeigenModal: true, 
+        index: this.state.index+1,
+         anzeigenUnrecht: false, 
+         ergebnis: this.state.ergebnis+1,
+        antwortenwert: ""});
       setTimeout(this.verbergenModal, modalZeit * 1000);
-      
     }
     else {
-    	this.setState({anzeigenUnrecht: true, index: this.state.index+1});
+    	  this.setState({anzeigenUnrecht: true});
         setTimeout(this.verbergenUnrecht, modalZeit * 1000);
     }
-    
+
+    if(this.state.index >= this.state.maxIndex) {
+      this.setState({done: true}); //cant do thissssss
+    }
     event.preventDefault();
+    event.stopPropagation();
   }
   
   verbergenModal() {
@@ -78,9 +89,7 @@ class FrageHalter extends React.Component {
   }
   
   render() {
-  	if(this.state.index >= maxIndex) {
-      this.setState({done: true});
-    }
+  	
 
     if(!this.state.done) {
       const frage = Objekt.questions[this.state.index];
@@ -88,7 +97,7 @@ class FrageHalter extends React.Component {
       return (
       <div>
         { this.state.anzeigenModal ? <KorrektModal /> : null }
-        <form onSubmit={this.pruefen}>
+        <form onSubmit={(event) => this.pruefen(event)}>
           <h1>Frage {this.state.index + 1}/{Objekt.questions.length}</h1>
           <h3>Ergebnis: {this.state.ergebnis}/{Objekt.questions.length}</h3>
           <hr></hr>
@@ -101,7 +110,7 @@ class FrageHalter extends React.Component {
           <button onClick={() =>this.addChar("ü")}>ü</button>
           <button onClick={() =>this.addChar("ß")}>ß</button>
   
-          {this.state.anzeigenUnrecht ? <p>Dass ist es nicht</p>: null}
+          {this.state.anzeigenUnrecht ? <p className={styles.red}>Dass ist es nicht</p>: null}
           </div>
           <br></br>
           <input type="submit" value="Submit" />
@@ -113,7 +122,7 @@ class FrageHalter extends React.Component {
         <h1>All Done</h1>
         <hr></hr>
         <h3>You got {this.state.ergebnis} out of {Objekt.questions.length}</h3>
-        <button onClick={window.location.reload()}>Play Again</button>
+        <button onClick={()=>{window.location.reload()}}>Play Again</button>
       </div>
     }
   
@@ -138,7 +147,12 @@ class App extends React.Component {
       var url = window.location.href;
 
       var id = url.split("=")[1];
-      var obj = await find(id);
+      try {
+        var obj = await find(id);
+      } catch {
+        obj = null;
+      }
+      
       console.log(obj);
       if(obj == null) {
         alert("Provided Code does not exist :(");

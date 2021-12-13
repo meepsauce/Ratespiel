@@ -22,8 +22,11 @@ export class dbClass {
     static cleanQuestions(questions) {
         for (var i = questions.length - 1; i >= 0; i--) {
             var q = questions[i];
+            if(q == null) {
+                questions.splice(i, 1)
+            }
             if(Object.keys(q) == 0) {
-                questions.splice(index, 1)
+                questions.splice(i, 1)
             }
             
         }
@@ -34,6 +37,7 @@ export class dbClass {
             "name": name,
             "creator": creator,
             "shuffle": shuffle,
+            "similarity": .8,
             "questions": questions
         }
     }

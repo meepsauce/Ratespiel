@@ -4,6 +4,8 @@ import styles from '../styles/Home.module.css'
 import React from 'react';
 import { recentSets, alive } from "../lib/api";
 
+
+
 export async function getServerSideProps(context) {
   var data = await alive();
   var recent = await recentSets();
@@ -35,7 +37,7 @@ function RecentList(props) {
     recent = recent.map((item,i) => {
       
       return (
-        <Link href={`https://3000-red-magpie-hfiuwsrk.ws-us23.gitpod.io/set?id=${item._id}`}>
+        <Link href={`http://localhost:3000/set?id=${item._id}`}>
           <div key={i} className={styles.card}>
           <h3>{item.name} -- By: {item.creator} - {item.questions.length} questions</h3>
           </div>
