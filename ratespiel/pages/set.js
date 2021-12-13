@@ -113,6 +113,7 @@ class FrageHalter extends React.Component {
         <h1>All Done</h1>
         <hr></hr>
         <h3>You got {this.state.ergebnis} out of {Objekt.questions.length}</h3>
+        <button onClick={window.location.reload()}>Play Again</button>
       </div>
     }
   
