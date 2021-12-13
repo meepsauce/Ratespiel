@@ -84,9 +84,11 @@ class Editor extends React.Component {
 
     async generate() {
        var obj = dbClass.setObject(this.state.name, storage.data, storage.author, this.state.shuffle);
-       var id = await add(obj);
-       console.log("data: " + id);
-       this.setState({id: id, url: window.location.href.replace("editor", `set?id=${id}`)});
+       var req = await add(obj);
+       console.log("whyyyy");
+       var setId = req.setId;
+       console.log("data: " + setId);
+       this.setState({setId: setId, url: window.location.href.replace("editor", `set?id=${setId}`)});
     }
     
     render() {
@@ -121,7 +123,7 @@ class Editor extends React.Component {
                         <br></br>
                         <br></br>
                         <button onClick={()=>{this.setState({secondPart: false})}}>Back to Questions</button>
-                        <button onClick={()=>{this.generate()}}><b>Publish Set</b></button>
+                        <button onClick={this.generate}><b>Publish Set</b></button>
                     </div>
                     )}
                 </div>

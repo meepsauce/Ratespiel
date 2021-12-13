@@ -42,7 +42,7 @@ export class dbClass {
     }
 
     generateId() {
-        var code = this.code();
+        var code = dbClass.code();
         if(!this.find(code)) {
             return code;
         }
@@ -54,6 +54,7 @@ export class dbClass {
     async insertSet(set) {
         return new Promise((resolve, reject)=> {
             console.log("pushed to lingering");
+            
             set._id = this.generateId();
             this.recent.push(set);
             this.db.insert(set, (err, doc)=> {
@@ -74,7 +75,6 @@ export class dbClass {
     }
 }
 var db = new dbClass();
-db.insertSet({"testing": "sucks"});
 export function connectDb() {
     return db;
 }

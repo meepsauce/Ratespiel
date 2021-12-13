@@ -15,6 +15,7 @@ export async function add(doc) {
         mode: 'cors',
         body: JSON.stringify(doc)
     });
+    console.log("api got it");
     return req.json();
 }
 
