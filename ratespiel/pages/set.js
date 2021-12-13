@@ -32,6 +32,7 @@ class FrageHalter extends React.Component {
     this.state = {
     	index: 0,
       maxIndex: Objeckt.questions.length-1,
+      done: false,
         antwortenwert: "",
         anzeigenModal: false,
         anzeigenUnrecht: false,
@@ -77,31 +78,44 @@ class FrageHalter extends React.Component {
   }
   
   render() {
-  	
-  	const frage = Objekt.questions[this.state.index];
-    
-  	return (
-    <div>
-      { this.state.anzeigenModal ? <KorrektModal /> : null }
-      <form onSubmit={this.pruefen}>
-        <h1>Frage {this.state.index + 1}/{Objekt.questions.length}</h1>
-        <h3>Ergebnis: {this.state.ergebnis}/{Objekt.questions.length}</h3>
-        <h2>„ {frage.question} ”</h2>
-        <input type="text" value={this.state.antwortenwert} onChange={(e)=>this.antwortenChange(e.target.value)}/>
-        <br/>
-        <div>
-        <button onClick={() =>this.addChar("ä")}>ä</button>
-        <button onClick={() =>this.addChar("ö")}>ö</button>
-        <button onClick={() =>this.addChar("ü")}>ü</button>
-        <button onClick={() =>this.addChar("ß")}>ß</button>
+  	if(this.state.index >= maxIndex) {
+      this.setState({done: true});
+    }
 
-        {this.state.anzeigenUnrecht ? <p>Dass ist es nicht</p>: null}
-        </div>
-        <br></br>
-        <input type="submit" value="Submit" />
-      </form>
-    </div>
-    )
+    if(!this.state.done) {
+      const frage = Objekt.questions[this.state.index];
+    
+      return (
+      <div>
+        { this.state.anzeigenModal ? <KorrektModal /> : null }
+        <form onSubmit={this.pruefen}>
+          <h1>Frage {this.state.index + 1}/{Objekt.questions.length}</h1>
+          <h3>Ergebnis: {this.state.ergebnis}/{Objekt.questions.length}</h3>
+          <hr></hr>
+          <h2>„ {frage.question} ”</h2>
+          <input type="text" value={this.state.antwortenwert} onChange={(e)=>this.antwortenChange(e.target.value)}/>
+          <br/>
+          <div>
+          <button onClick={() =>this.addChar("ä")}>ä</button>
+          <button onClick={() =>this.addChar("ö")}>ö</button>
+          <button onClick={() =>this.addChar("ü")}>ü</button>
+          <button onClick={() =>this.addChar("ß")}>ß</button>
+  
+          {this.state.anzeigenUnrecht ? <p>Dass ist es nicht</p>: null}
+          </div>
+          <br></br>
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
+      )
+    } else {
+      return <div>
+        <h1>All Done</h1>
+        <hr></hr>
+        <h3>You got {this.state.ergebnis} out of {Objekt.questions.length}</h3>
+      </div>
+    }
+  
   }
  }
  
