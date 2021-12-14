@@ -140,6 +140,7 @@ class App extends React.Component {
  	constructor(props) {
   	super(props);
     this.state = {
+      err: null,
       start: false,
       loaded: false,
     }
@@ -159,9 +160,8 @@ class App extends React.Component {
         obj = null;
       }
       
-      console.log(obj);
       if(obj == null) {
-        alert("Provided Code does not exist :(");
+        this.setState({err: "Code doesn't exist"})
         return null;
       }
       Objekt = obj;
@@ -177,7 +177,10 @@ class App extends React.Component {
             <FrageHalter/>
           ): (
             <div>
-              {!this.state.loaded ? <h1>Loading....</h1> : (
+              {!this.state.loaded ? <div>
+                <h1>Loading....</h1>
+                <h3 className={styles.red}>Error: {this.state.err}</h3>
+                </div> : (
                 <div>
                   <h1>Bereit?</h1>
                   <hr></hr>

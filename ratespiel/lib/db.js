@@ -23,12 +23,13 @@ export class dbClass {
         for (var i = questions.length - 1; i >= 0; i--) {
             var q = questions[i];
             if(q == null) {
-                questions.splice(i, 1)
+                questions.splice(i, 1);
+                continue;
             }
             if(Object.keys(q) == 0) {
-                questions.splice(i, 1)
-            }
-            
+                questions.splice(i, 1);
+                continue;
+            }  
         }
     }
 
@@ -59,6 +60,7 @@ export class dbClass {
     async insertSet(set) {
         return new Promise(async(resolve, reject)=> {     
             set._id = await this.generateId();
+            dbClass.cleanQuestions(set.questions);
             this.db.insert(set, (err, doc)=> {
                 if(err) resolve(null);
                 this.recentDb.insert(doc);

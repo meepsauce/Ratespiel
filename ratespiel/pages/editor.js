@@ -83,7 +83,7 @@ class Editor extends React.Component {
     }
 
     async generate() {
-       var obj = dbClass.setObject(this.state.name, storage.data, storage.author, this.state.shuffle);
+       var obj = dbClass.setObject(this.state.name, storage.data, this.state.author, this.state.shuffle);
        var req = await add(obj);
        
        var setId = req.object._id;
@@ -116,11 +116,11 @@ class Editor extends React.Component {
                         </div>
                     ) : (
                     <div>
-                        <label><b>Set Name:</b></label><input type="text"></input>
+                        <label><b>Set Name:</b></label><input type="text" value={this.state.author} onChange={(event)=>{this.setState({author: event.target.value})}}></input>
                         <br></br>
-                        <label><b>Author Name:</b></label><input type="text"></input>
+                        <label><b>Author Name:</b></label><input type="text" value={this.state.name} onChange={(event)=>{this.setState({name: event.target.value})}}></input>
                         <br></br>
-                        <label>Shuffle Set: </label><Checkbox onChange={()=>{}}></Checkbox>
+                        <label>Shuffle Set: </label><Checkbox onChange={(event)=>{ this.setState({shuffle: event.target.value})}}></Checkbox>
                         <br></br>
                         <br></br>
                         <button onClick={()=>{this.setState({secondPart: false})}}>Back to Questions</button>
