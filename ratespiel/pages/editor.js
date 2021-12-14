@@ -116,9 +116,11 @@ class Editor extends React.Component {
                         </div>
                     ) : (
                     <div>
-                        <label><b>Set Name:</b></label><input type="text" value={this.state.author} onChange={(event)=>{this.setState({author: event.target.value})}}></input>
+                        <label><b>Set Name: </b></label><input type="text" value={this.state.author} onChange={(event)=>{this.setState({author: event.target.value})}}></input>
                         <br></br>
-                        <label><b>Author Name:</b></label><input type="text" value={this.state.name} onChange={(event)=>{this.setState({name: event.target.value})}}></input>
+                        <label><b>Author Name: </b></label><input type="text" value={this.state.name} onChange={(event)=>{this.setState({name: event.target.value})}}></input>
+                        <br></br>
+                        <label><b>String Similarity: </b></label><input type="number" value={0.85}></input>
                         <br></br>
                         <label>Shuffle Set: </label><Checkbox onChange={(event)=>{ this.setState({shuffle: event.target.value})}}></Checkbox>
                         <br></br>

@@ -42,6 +42,7 @@ export class dbClass {
             "questions": questions
         }
     }
+    
 
     static code() {
         return Math.random().toString(18).slice(2).slice(8);

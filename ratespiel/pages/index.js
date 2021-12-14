@@ -1,4 +1,3 @@
-
 import Link from "next/link"
 import styles from '../styles/Home.module.css'
 import React from 'react';
@@ -83,16 +82,15 @@ export default function Home(props) {
         <hr></hr>
         <h5>Database: { props.dbOn ? <span>&#9989;</span> : <span>&#10060;</span> } </h5>
         <h5>API: { props.apiOn ? <span>&#9989;</span> : <span>&#10060;</span> } </h5>
-        <h4>{ props.dbOn ? <h5>Uptime: {formatTime(props.dbOn)}</h5> : null }</h4>
+        <h5>{ props.dbOn ? <h5>Uptime: {formatTime(props.dbOn)}</h5> : null }</h5>
         <hr></hr>
-        <h4 className={styles.red}>*As this software is in active development, your data will not be persistently saved</h4>
-        <h2>[Content is supposed to be here]</h2>
+        <h2>Create Configurable Learning Sets</h2>
         
         <label><b>Enter a set's code: </b></label><input type="text" value={code} onChange={(e)=>{setCode(e.target.value)}}></input>
         <p className={styles.red}>{codeError}</p>
         <button onClick={goToSet}>Go</button>
 
-        <h2>Oder</h2>
+        <h2>Or:</h2>
         <Link href="/editor">
           <button>Create a new set (no account required)</button>
         </Link>
@@ -100,7 +98,7 @@ export default function Home(props) {
           <button>View GitHub Repository <span className="fa fa-github" style={{fontSize: "16px"}}></span></button>
         </Link>
         <Link href="/docs">
-          <button>View API Docs</button>
+          <button>View API Docs </button>
         </Link>
         
       </div>
