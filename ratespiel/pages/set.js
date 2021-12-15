@@ -61,7 +61,8 @@ class FrageHalter extends React.Component {
   	const frage = Objekt.questions[this.state.index];
     if(frage.strict == false) {
       frage.answer = frage.answer.toLowerCase();
-      this.state.antwortenwert =this.state.antwortenwert.toLowerCase();
+      
+      this.setState({antwortenwert: this.state.antwortenwert.toLowerCase()});
     }
   	if(this.state.antwortenwert === frage.answer) {
       this.setState({anzeigenModal: true, 

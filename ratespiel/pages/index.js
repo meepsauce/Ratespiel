@@ -36,9 +36,9 @@ function RecentList(props) {
     recent = recent.map((item,i) => {
       
       return (
-        <Link href={`http://localhost:3000/set?id=${item._id}`}>
-          <div key={i} className={styles.card}>
-          <h3>{item.name} -- By: {item.creator} - {item.questions.length} questions</h3>
+        <Link href={`/set?id=${item._id}`} key={i} passHref>
+          <div  className={styles.card}>
+            <h3>{item.name} -- By: {item.creator} - {item.questions.length} questions</h3>
           </div>
         </Link>
       );
@@ -87,7 +87,7 @@ export default function Home(props) {
         <hr></hr>
         <h2>Create Configurable Learning Sets</h2>
         
-        <label><b>Enter a set's code: </b></label><input type="text" value={code} onChange={(e)=>{setCode(e.target.value)}}></input>
+        <label><b>Enter a sets code: </b></label><input type="text" value={code} onChange={(e)=>{setCode(e.target.value)}}></input>
         <p className={styles.red}>{codeError}</p>
         <button onClick={goToSet}>Go</button>
 
