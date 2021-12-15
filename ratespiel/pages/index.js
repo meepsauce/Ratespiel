@@ -70,6 +70,7 @@ export default function Home(props) {
     }
     else {
       setCodeError("Invalid Code");
+      
     }
    
   }
