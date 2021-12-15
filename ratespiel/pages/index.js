@@ -70,13 +70,13 @@ export default function Home(props) {
     }
     else {
       setCodeError("Invalid Code");
-      
+
     }
    
   }
   
   return <div className={styles.centered}>
-    <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/>
+    <br/> <br/> <br/> <br/> <br/> <br/>
       <div className={styles.card}>
         <h1 className={styles.big}>Ratespiel</h1>
         <h5>Quizlet but worse</h5>
