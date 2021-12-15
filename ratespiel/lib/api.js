@@ -1,7 +1,7 @@
 
 
 export async function find(id) {
-    var req = await fetch("https://3000-gray-hummingbird-yzr7sfio.ws-us23.gitpod.io/api/find", {
+    var req = await fetch("https://ratespiel.vercel.app/api/find", {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors',
         body: JSON.stringify({id: id})
@@ -12,7 +12,7 @@ export async function find(id) {
 
 export async function add(doc) {
     
-    var req = await fetch("https://3000-gray-hummingbird-yzr7sfio.ws-us23.gitpod.io/api/insert", {
+    var req = await fetch("https://ratespiel.vercel.app/api/insert", {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors',
         body: JSON.stringify(doc)
@@ -22,7 +22,7 @@ export async function add(doc) {
 }
 
 export async function alive() {
-    var req = await fetch("https://3000-gray-hummingbird-yzr7sfio.ws-us23.gitpod.io/api/alive", {
+    var req = await fetch("https://ratespiel.vercel.app/api/alive", {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors'
     });
@@ -30,7 +30,7 @@ export async function alive() {
 }
 
 export async function recentSets() {
-    var req = await fetch("https://3000-gray-hummingbird-yzr7sfio.ws-us23.gitpod.io/api/recent", {
+    var req = await fetch("https://ratespiel.vercel.app/api/recent", {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors'
     });
